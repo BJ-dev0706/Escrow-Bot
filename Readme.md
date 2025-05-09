@@ -30,7 +30,7 @@ A secure and reliable cryptocurrency escrow bot for Discord that facilitates saf
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/BJ-dev0706/crypto-escrow-discord-bot.git
+   git clone https://github.com/BJ-dev0706/Escrow-Bot.git
    cd crypto-escrow-discord-bot
    ```
 

@@ -3,8 +3,8 @@
  * Replace these values with your actual Coinbase API credentials
  */
 const COINBASE_CONFIG = {
-  API_KEY: 'your-coinbase-api-key',
-  API_SECRET: 'your-coinbase-api-secret'
+  API_KEY: process.env.COINBASE_API_KEY,
+  API_SECRET: process.env.COINBASE_API_SECRET
 };
 
 module.exports = COINBASE_CONFIG; 
