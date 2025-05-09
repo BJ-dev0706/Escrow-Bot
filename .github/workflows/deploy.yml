@@ -1,0 +1,53 @@
+name: Deploy Escrow-Bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Deploy to VPS server via SSH
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          # Check and install NVM if not available
+          if ! command -v nvm &> /dev/null; then
+            echo "Installing NVM..."
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          fi
+          
+          # Install Node.js if not available
+          if ! command -v node &> /dev/null; then
+            echo "Installing Node.js 20..."
+            nvm install 20
+            nvm use 20
+          fi
+          
+          # Install PM2 globally if not available
+          if ! command -v pm2 &> /dev/null; then
+            echo "Installing PM2..."
+            npm install -g pm2
+          fi
+          
+          # Deploy application
+          cd /var/www/Escrow-Bot
+          git pull origin main
+          npm install
+          pm2 restart 5 || pm2 start server.js --name "Escrow-Bot"

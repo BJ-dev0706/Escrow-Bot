@@ -76,6 +76,14 @@ const SelectComponent = async () => {
           id: "1329642749984505947",
           name: "litecoinltclogo",
         },
+      },
+      {
+        label: "Solana",
+        value: "solana",
+        emoji: {
+          id: "1329642759920005120",
+          name: "solanalogo",
+        },
       }
     ]);
     const row = new ActionRowBuilder().addComponents(selectMenu);
