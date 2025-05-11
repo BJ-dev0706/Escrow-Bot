@@ -5,10 +5,10 @@ const fetch = require('node-fetch');
 
 const getTokenPrice = async (token) => {
   const symbols = {
-    bitcoin: "BTCUSDT",
-    ethereum: "ETHUSDT",
-    litecoin: "LTCUSDT",
-    solana: "SOLUSDT"
+    bitcoin: "bitcoin",
+    ethereum: "ethereum",
+    litecoin: "litecoin",
+    solana: "solana"
   };
 
   if (!symbols[token]) {
@@ -17,7 +17,7 @@ const getTokenPrice = async (token) => {
 
   try {
     const response = await fetch(
-      `https://api.binance.com/api/v3/ticker/price?symbol=${symbols[token]}`
+      `https://api.coingecko.com/api/v3/simple/price?ids=${symbols[token]}&vs_currencies=usd`
     );
     
     if (!response.ok) {
@@ -25,11 +25,11 @@ const getTokenPrice = async (token) => {
     }
     
     const data = await response.json();
-    if (!data || !data.price) {
+    if (!data || !data[symbols[token]] || !data[symbols[token]].usd) {
       throw new Error(`Invalid price data for ${token}`);
     }
     
-    return data;
+    return { price: data[symbols[token]].usd.toString() };
   } catch (error) {
     console.error(`Error fetching ${token} price:`, error);
     throw error;
